@@ -43,4 +43,20 @@ public class PostService {
         postRepository.deleteById(id);
         return id;
     }
+
+    @Transactional(readOnly = true)
+    public List<Posts> getauthorone(String author){
+        return postRepository.findByAuthor(author);
+    }
+
+//    @Transactional(readOnly = true)
+//    public List<Posts> getone(Long id){
+//       postRepository.findById(id).orElseThrow(
+//               ()->new IllegalArgumentException("해당 글이 없음")
+//        );
+//       return postRepository.findById(id);
+//
+//    }
+
+
 }

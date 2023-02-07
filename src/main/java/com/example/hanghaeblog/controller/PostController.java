@@ -5,7 +5,6 @@ import com.example.hanghaeblog.entity.Posts;
 import com.example.hanghaeblog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -36,7 +35,16 @@ public class PostController {
         return postService.delete(id);
     }
 
+    @GetMapping("/post/{author}")
+    public List<Posts> getone(@PathVariable String author){
+        return postService.getauthorone(author);
+    }
 
+
+//    @GetMapping("/post/{id}")
+//    public PostRequestDto getone(@PathVariable Long id){
+//        return postService.getone(id);
+//    }
 
 
 
