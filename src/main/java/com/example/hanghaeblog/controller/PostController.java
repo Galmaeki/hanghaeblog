@@ -31,10 +31,12 @@ public class PostController {
         return postService.update(id,postRequestDto);
     }
 
-    @GetMapping("/post/{id}")
-    public List<Posts> getone(@PathVariable Long id){
-        return postService.getone(id);
+    @DeleteMapping("/post/{id}")
+    public Long deletepost(@PathVariable Long id){
+        return postService.delete(id);
     }
+
+
 
 
 

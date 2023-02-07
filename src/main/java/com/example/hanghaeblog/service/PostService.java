@@ -39,11 +39,8 @@ public class PostService {
     }
 
     @Transactional
-    public List<Posts> getone(Long id){
-        Posts post = postRepository.findById(id).orElseThrow(
-                ()->new IllegalArgumentException("해당 글이 없음")
-        );
-        return (List<Posts>) post;
-
+    public Long delete(Long id){
+        postRepository.deleteById(id);
+        return id;
     }
 }
