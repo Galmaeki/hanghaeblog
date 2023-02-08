@@ -35,26 +35,27 @@ public class PostService {
 
     @Transactional
     public String update(Long id, PostRequestDto postRequestDto){
+        try{
         Posts post = postRepository.findById(id).orElseThrow(
-                ()->new IllegalArgumentException("해당 글이 없음")
+                ()->new IllegalArgumentException()
         );
         if(!postRequestDto.getPassword().equals(post.getPassword())){
             return "실패";//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
         }//포스트리퀘스트 dto로 받은 비밀번호가 다를경우 업데이트 전에 메소드가 종료되도록함
         post.update(postRequestDto);
-        return "성공";
+        return "성공";}catch (IllegalArgumentException E) {return null;}
     }
 
     @Transactional
     public String delete(Long id,PostRequestDto postRequestDto){
-        Posts post = postRepository.findById(id).orElseThrow(
+        try{Posts post = postRepository.findById(id).orElseThrow(
                 ()->new IllegalArgumentException("해당 글이 없음")
         );
         if(!postRequestDto.getPassword().equals(post.getPassword())){
             return "실패";//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
         }
         postRepository.deleteById(id);
-        return "성공";
+        return "성공";}catch (IllegalArgumentException E){return null;}
     }
 
     @Transactional(readOnly = true)
@@ -67,23 +68,15 @@ public class PostService {
         return postDto;
     }
 
-//    @Transactional(readOnly = true)//수정이 들어가지 않음
-//    public List getPosts(){
-//        List<Posts> lists =postRepository.findAllByOrderByModifiedAtDesc();
-//        List<PostDto> listdto = new ArrayList<>();
-//        for (Posts post : lists) {
-//            listdto.add(new PostDto(post));
-//        }
-//        return listdto;
-//    }
-
     @Transactional(readOnly = true)
     public PostDto getidone(Long id){
-       Posts post = postRepository.findById(id).orElseThrow(
-                ()->new IllegalArgumentException("해당 글이 없음")
+       try{Posts post = postRepository.findById(id).orElseThrow(
+                ()->new IllegalArgumentException()
         );
         PostDto postDto = new PostDto(post);
-        return postDto;
+        return postDto;}catch(IllegalArgumentException EE){
+           return null;
+       }
     }
 
 

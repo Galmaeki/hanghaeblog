@@ -41,7 +41,10 @@ public class PostController {
     public PostResponseDto updatepost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
         PostResponseDto<String> post = new PostResponseDto<>();
         post.setData(postService.update(id,postRequestDto));
-        post.setSucess(post.getData().equals("실패")?"실패":"성공");
+        if(post.getData()==null){
+            post.setSucess("id가 잘못되었습니다");
+        }else{
+        post.setSucess(post.getData().equals("실패")?"실패":"성공");}
         return post;
     }
 
@@ -49,15 +52,18 @@ public class PostController {
     public PostResponseDto deletepost(@PathVariable Long id,@RequestBody PostRequestDto postRequestDto){
         PostResponseDto<String> post = new PostResponseDto<>();
         post.setData(postService.delete(id,postRequestDto));
-        post.setSucess(post.getData().equals("실패")?"실패":"성공");
+        if(post.getData()==null){
+            post.setSucess("id가 잘못되었습니다");
+        }else{
+            post.setSucess(post.getData().equals("실패")?"실패":"성공");}
         return post;
     }
 
     @GetMapping("/post/author/{author}")
     public PostResponseDto getauthorone(@PathVariable String author){
         PostResponseDto<List> post = new PostResponseDto<>();
-        post.setSucess("성공");
         post.setData(postService.getauthorone(author));
+        post.setSucess(post.getData().isEmpty()?"글이 업서오!":"성공");
         return post;
     }
 
@@ -65,8 +71,8 @@ public class PostController {
     @GetMapping("/post/{id}")
     public PostResponseDto getidone(@PathVariable Long id){
         PostResponseDto<PostDto> post = new PostResponseDto<>();
-        post.setSucess("성공");
         post.setData(postService.getidone(id));
+        post.setSucess(post.getData()==null?"글이 업서오!":"성공");
         return post;
     }
 
