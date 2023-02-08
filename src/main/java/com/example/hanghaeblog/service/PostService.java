@@ -21,28 +21,34 @@ public class PostService {
     }
 
     @Transactional
-    public Posts createPost(PostRequestDto requestDto){
+    public String createPost(PostRequestDto requestDto){
         Posts post = new Posts(requestDto);
         postRepository.save(post);
-        return post;
+        return "성공";
     }
 
     @Transactional
-    public Long update(Long id, PostRequestDto postRequestDto){
+    public String update(Long id, PostRequestDto postRequestDto){
         Posts post = postRepository.findById(id).orElseThrow(
                 ()->new IllegalArgumentException("해당 글이 없음")
         );
-        if(postRequestDto.getPassword()!=post.getPassword()){
-            return post.getId();//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
+        if(!postRequestDto.getPassword().equals(post.getPassword())){
+            return "실패";//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
         }//포스트리퀘스트 dto로 받은 비밀번호가 다를경우 업데이트 전에 메소드가 종료되도록함
         post.update(postRequestDto);
-        return post.getId();
+        return "성공";
     }
 
     @Transactional
-    public Long delete(Long id){
+    public String delete(Long id,String pw){
+        Posts post = postRepository.findById(id).orElseThrow(
+                ()->new IllegalArgumentException("해당 글이 없음")
+        );
+        if(!pw.equals(post.getPassword())){
+            return "실패";//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
+        }
         postRepository.deleteById(id);
-        return id;
+        return "성공";
     }
 
     @Transactional(readOnly = true)

@@ -1,6 +1,5 @@
 package com.example.hanghaeblog.controller;
 
-import com.example.hanghaeblog.dto.PostDto;
 import com.example.hanghaeblog.dto.PostRequestDto;
 import com.example.hanghaeblog.dto.PostResponseDto;
 import com.example.hanghaeblog.entity.Posts;
@@ -24,19 +23,18 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public Posts createPost(@RequestBody PostRequestDto requestDto){
+    public String createPost(@RequestBody PostRequestDto requestDto){
         return postService.createPost(requestDto);
-
     }
 
     @PutMapping("/post/{id}")
-    public Long updatepost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
+    public String updatepost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
         return postService.update(id,postRequestDto);
     }
 
     @DeleteMapping("/post/{id}")
-    public Long deletepost(@PathVariable Long id){
-        return postService.delete(id);
+    public String deletepost(@PathVariable Long id,@RequestBody String pw){
+        return postService.delete(id,pw);
     }
 
     @GetMapping("/post/{author}")
