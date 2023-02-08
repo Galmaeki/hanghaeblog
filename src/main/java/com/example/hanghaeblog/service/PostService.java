@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +58,21 @@ public class PostService {
         return postRepository.findByAuthor(author);
     }
 
+    @Transactional(readOnly = true)
+    public Posts getidone(Long id){
+       Posts post = postRepository.findById(id).orElseThrow(
+                ()->new IllegalArgumentException("해당 글이 없음")
+        );
+        return post;
+    }
+
+
+//    @Transactional(readOnly = true)
+//    public Optional<Posts> getidone(Long id){
+//        Optional<Posts> optionalExample = postRepository.findById(id);
+//        //List<Posts> exampleList = optionalExample.map(Collections::singletonList).orElse(Collections.emptyList());
+//        return  optionalExample;
+//    }
 //    @Transactional(readOnly = true)
 //    public List<Posts> getone(Long id){
 //       postRepository.findById(id).orElseThrow(

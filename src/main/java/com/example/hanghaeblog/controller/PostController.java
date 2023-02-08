@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -18,6 +19,7 @@ public class PostController {
     @GetMapping("/posts")
     public PostResponseDto getAll(){
         PostResponseDto<List> post = new PostResponseDto<>();
+        post.setSucess("성공");
         post.setData(postService.getPosts());
         return post;
     }
@@ -37,16 +39,22 @@ public class PostController {
         return postService.delete(id,pw);
     }
 
-    @GetMapping("/post/{author}")
-    public List<Posts> getone(@PathVariable String author){
-        return postService.getauthorone(author);
+    @GetMapping("/post/author/{author}")
+    public PostResponseDto getauthorone(@PathVariable String author){
+        PostResponseDto<List> post = new PostResponseDto<>();
+        post.setSucess("성공");
+        post.setData(postService.getauthorone(author));
+        return post;
     }
 
 
-//    @GetMapping("/post/{id}")
-//    public PostRequestDto getone(@PathVariable Long id){
-//        return postService.getone(id);
-//    }
+    @GetMapping("/post/{id}")
+    public PostResponseDto getidone(@PathVariable Long id){
+        PostResponseDto<Posts> post = new PostResponseDto<>();
+        post.setSucess("성공");
+        post.setData(postService.getidone(id));
+        return post;
+    }
 
 
 
