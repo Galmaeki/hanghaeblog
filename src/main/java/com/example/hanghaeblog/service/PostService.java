@@ -1,5 +1,6 @@
 package com.example.hanghaeblog.service;
 
+import com.example.hanghaeblog.dto.PostDto;
 import com.example.hanghaeblog.dto.PostRequestDto;
 import com.example.hanghaeblog.entity.Posts;
 import com.example.hanghaeblog.repository.PostRepository;

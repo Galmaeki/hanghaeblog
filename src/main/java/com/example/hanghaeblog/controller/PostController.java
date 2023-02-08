@@ -1,6 +1,8 @@
 package com.example.hanghaeblog.controller;
 
+import com.example.hanghaeblog.dto.PostDto;
 import com.example.hanghaeblog.dto.PostRequestDto;
+import com.example.hanghaeblog.dto.PostResponseDto;
 import com.example.hanghaeblog.entity.Posts;
 import com.example.hanghaeblog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,10 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/posts")
-    public List<Posts> getAll(){
-        return postService.getPosts();
+    public PostResponseDto getAll(){
+        PostResponseDto<List> post = new PostResponseDto<>();
+        post.setData(postService.getPosts());
+        return post;
     }
 
     @PostMapping("/post")

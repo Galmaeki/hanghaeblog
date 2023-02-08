@@ -1,6 +1,5 @@
 package com.example.hanghaeblog.repository;
 
-import com.example.hanghaeblog.dto.PostRequestDto;
 import com.example.hanghaeblog.entity.Posts;
 import org.springframework.data.jpa.repository.JpaRepository;
 
