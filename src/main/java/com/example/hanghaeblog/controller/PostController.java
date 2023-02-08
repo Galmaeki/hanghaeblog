@@ -1,5 +1,6 @@
 package com.example.hanghaeblog.controller;
 
+import com.example.hanghaeblog.dto.PostDto;
 import com.example.hanghaeblog.dto.PostRequestDto;
 import com.example.hanghaeblog.dto.PostResponseDto;
 import com.example.hanghaeblog.entity.Posts;
@@ -50,7 +51,7 @@ public class PostController {
 
     @GetMapping("/post/{id}")
     public PostResponseDto getidone(@PathVariable Long id){
-        PostResponseDto<Posts> post = new PostResponseDto<>();
+        PostResponseDto<PostDto> post = new PostResponseDto<>();
         post.setSucess("성공");
         post.setData(postService.getidone(id));
         return post;

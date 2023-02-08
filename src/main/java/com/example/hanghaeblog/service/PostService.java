@@ -8,9 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +17,13 @@ public class PostService {
     private final PostRepository postRepository;
 
     @Transactional(readOnly = true)//수정이 들어가지 않음
-    public List<Posts> getPosts(){
-        return postRepository.findAllByOrderByModifiedAtDesc();
+    public List getPosts(){
+        List<Posts> lists =postRepository.findAllByOrderByModifiedAtDesc();
+        List<PostDto> listdto = new ArrayList<>();
+        for (Posts post : lists) {
+            listdto.add(new PostDto(post));
+        }
+        return listdto;
     }
 
     @Transactional
@@ -54,16 +58,32 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<Posts> getauthorone(String author){
-        return postRepository.findByAuthor(author);
+    public List getauthorone(String author){
+        List<Posts> list = postRepository.findByAuthor(author);
+        List<PostDto> postDto = new ArrayList<>();
+        for (Posts post:list) {
+            postDto.add(new PostDto(post));
+        }
+        return postDto;
     }
 
+//    @Transactional(readOnly = true)//수정이 들어가지 않음
+//    public List getPosts(){
+//        List<Posts> lists =postRepository.findAllByOrderByModifiedAtDesc();
+//        List<PostDto> listdto = new ArrayList<>();
+//        for (Posts post : lists) {
+//            listdto.add(new PostDto(post));
+//        }
+//        return listdto;
+//    }
+
     @Transactional(readOnly = true)
-    public Posts getidone(Long id){
+    public PostDto getidone(Long id){
        Posts post = postRepository.findById(id).orElseThrow(
                 ()->new IllegalArgumentException("해당 글이 없음")
         );
-        return post;
+        PostDto postDto = new PostDto(post);
+        return postDto;
     }
 
 
