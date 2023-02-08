@@ -3,13 +3,11 @@ package com.example.hanghaeblog.controller;
 import com.example.hanghaeblog.dto.PostDto;
 import com.example.hanghaeblog.dto.PostRequestDto;
 import com.example.hanghaeblog.dto.PostResponseDto;
-import com.example.hanghaeblog.entity.Posts;
 import com.example.hanghaeblog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -20,24 +18,39 @@ public class PostController {
     @GetMapping("/posts")
     public PostResponseDto getAll(){
         PostResponseDto<List> post = new PostResponseDto<>();
-        post.setSucess("성공");
-        post.setData(postService.getPosts());
+        if(postService.getPosts().isEmpty())
+        {
+            post.setData(null);
+            post.setSucess("글이 업서오!");
+        }else{
+            post.setData(postService.getPosts());
+            post.setSucess("성공");
+        }
         return post;
     }
 
     @PostMapping("/post")
-    public String createPost(@RequestBody PostRequestDto requestDto){
-        return postService.createPost(requestDto);
+    public PostResponseDto createPost(@RequestBody PostRequestDto requestDto){
+        PostResponseDto<String> post = new PostResponseDto<>();
+        post.setData(postService.createPost(requestDto));
+        post.setSucess("작성 성공");
+        return post;
     }
 
     @PutMapping("/post/{id}")
-    public String updatepost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
-        return postService.update(id,postRequestDto);
+    public PostResponseDto updatepost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
+        PostResponseDto<String> post = new PostResponseDto<>();
+        post.setData(postService.update(id,postRequestDto));
+        post.setSucess(post.getData().equals("실패")?"실패":"성공");
+        return post;
     }
 
     @DeleteMapping("/post/{id}")
-    public String deletepost(@PathVariable Long id,@RequestBody String pw){
-        return postService.delete(id,pw);
+    public PostResponseDto deletepost(@PathVariable Long id,@RequestBody PostRequestDto postRequestDto){
+        PostResponseDto<String> post = new PostResponseDto<>();
+        post.setData(postService.delete(id,postRequestDto));
+        post.setSucess(post.getData().equals("실패")?"실패":"성공");
+        return post;
     }
 
     @GetMapping("/post/author/{author}")
