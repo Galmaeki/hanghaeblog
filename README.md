@@ -19,4 +19,6 @@
     - 선택한 게시글을 삭제하고 Client 로 성공했다는 표시 반환하기
 
 ![제목 없는 다이어그램 drawio (1)](https://user-images.githubusercontent.com/122267336/217186975-0cfe0c18-560b-4734-8157-1bb3d05fbffe.png)
-![캡처](https://user-images.githubusercontent.com/122267336/217187109-87a1d6a7-10ce-42c9-bd89-9ff768b75944.PNG)
+
+![캡처](https://user-images.githubusercontent.com/122267336/217706022-cc177c0e-d44c-40bf-9881-86345e463257.PNG)
+![캡1처](https://user-images.githubusercontent.com/122267336/217706028-a508ad5f-fe95-4f2e-ba72-7a851efcb20f.PNG)
