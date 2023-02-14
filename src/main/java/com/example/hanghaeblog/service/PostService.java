@@ -52,7 +52,7 @@ public class PostService {
         Posts post = postRepository.findById(id).orElseThrow(()->new IllegalArgumentException());
         if(!(post.getAuthor().equals(username)))
             return "남에 글은 수정할 수 업서오";
-        post.update(postRequestDto);
+        post.update(postRequestDto,username);
         return "성공";//아래는 글번호 오류
         } catch (IllegalArgumentException E) {return "글이 존재하지 않아오!";}
     }
@@ -62,9 +62,9 @@ public class PostService {
         try{Posts post = postRepository.findById(id).orElseThrow(
                 ()->new IllegalArgumentException("해당 글이 없음")
         );
-        if(!postRequestDto.getPassword().equals(post.getPassword())){
-            return "실패";//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
-        }
+//        if(!postRequestDto.getPassword().equals(post.getPassword())){
+//            return "실패";//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
+//        }
         postRepository.deleteById(id);
         return "성공";}catch (IllegalArgumentException E){return null;}
     }
