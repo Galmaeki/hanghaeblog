@@ -47,23 +47,20 @@ public class PostController {
     }
 
     @DeleteMapping("/post/{id}")
-    public ResponseDto deletepost(@PathVariable Long id,@RequestBody PostRequestDto postRequestDto){
+    public ResponseDto deletepost(@PathVariable Long id,HttpServletRequest request){
         ResponseDto<String> post = new ResponseDto<>();
-        post.setData(postService.delete(id,postRequestDto));
-        if(post.getData()==null){
-            post.setSucess("id가 잘못되었습니다");
-        }else{
-            post.setSucess(post.getData().equals("실패")?"실패":"성공");}
+        post.setData(postService.delete(id,request));
+        post.setSucess(post.getData().equals("성공")?"성공":"실패");
         return post;
     }
 
-    @GetMapping("/post/author/{author}")
-    public ResponseDto getauthorone(@PathVariable String author){
-        ResponseDto<List> post = new ResponseDto<>();
-        post.setData(postService.getauthorone(author));
-        post.setSucess(post.getData().isEmpty()?"글이 업서오!":"성공");
-        return post;
-    }
+//    @GetMapping("/post/author/{author}")
+//    public ResponseDto getauthorone(@PathVariable String author){
+//        ResponseDto<List> post = new ResponseDto<>();
+//        post.setData(postService.getauthorone(author));
+//        post.setSucess(post.getData().isEmpty()?"글이 업서오!":"성공");
+//        return post;
+//    }
 
 
     @GetMapping("/post/{id}")
