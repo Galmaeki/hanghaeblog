@@ -7,6 +7,7 @@ import com.example.hanghaeblog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -30,10 +31,10 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseDto createPost(@RequestBody PostRequestDto requestDto){
+    public ResponseDto createPost(@RequestBody PostRequestDto requestDto, HttpServletRequest request){
         ResponseDto<String> post = new ResponseDto<>();
-        post.setData(postService.createPost(requestDto));
-        post.setSucess("작성 성공");
+        post.setData(postService.createPost(requestDto,request));
+        post.setSucess(post.getData().equals("성공")?"성공":"실패");
         return post;
     }
 

@@ -34,6 +34,13 @@ public class Posts extends Timestamped {
         this.password=requestDto.getPassword();
     }
 
+    public Posts(PostRequestDto requestDto,String author){//생성자 만듬
+        this.title= requestDto.getTitle();
+        this.content=requestDto.getContent();
+        this.author=author;
+        this.password=requestDto.getPassword();
+    }
+
     public void update(PostRequestDto requestDto){//업데이트기능 미리 만들어둠
         this.title= requestDto.getTitle();
         this.content=requestDto.getContent();

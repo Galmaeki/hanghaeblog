@@ -3,11 +3,16 @@ package com.example.hanghaeblog.service;
 import com.example.hanghaeblog.dto.PostDto;
 import com.example.hanghaeblog.dto.PostRequestDto;
 import com.example.hanghaeblog.entity.Posts;
+import com.example.hanghaeblog.entity.Users;
+import com.example.hanghaeblog.jwt.JwtUtil;
 import com.example.hanghaeblog.repository.PostRepository;
+import com.example.hanghaeblog.repository.UsersRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final UsersRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     @Transactional(readOnly = true)//수정이 들어가지 않음
     public List getPosts(){
@@ -27,8 +34,24 @@ public class PostService {
     }
 
     @Transactional
-    public String createPost(PostRequestDto requestDto){
-        Posts post = new Posts(requestDto);
+    public String createPost(PostRequestDto requestDto, HttpServletRequest request){
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
+        if(token==null)//노 토큰 노 권한!
+            return "권한이 업내오!";
+        if (jwtUtil.validateToken(token)) {
+            // 토큰에서 사용자 정보 가져오기
+            claims = jwtUtil.getUserInfoFromToken(token);
+        } else {
+            return "토큰이 고장낫서오!";
+        }
+        try{
+        userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+        );}catch (IllegalArgumentException e){return "사용자가 존재하지 않대오?";}
+
+
+        Posts post = new Posts(requestDto,claims.getSubject());
         postRepository.save(post);
         return "성공";
     }
