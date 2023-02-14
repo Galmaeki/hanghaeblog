@@ -24,27 +24,25 @@ public class Posts extends Timestamped {
     @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false)
-    private String password;
 
-    public Posts(PostRequestDto requestDto){//생성자 만듬
-        this.title= requestDto.getTitle();
-        this.content=requestDto.getContent();
-        this.author=requestDto.getAuthor();
-        this.password=requestDto.getPassword();
-    }
+//    public Posts(PostRequestDto requestDto){//생성자 만듬
+//        this.title= requestDto.getTitle();
+//        this.content=requestDto.getContent();
+//        this.author=requestDto.getAuthor();
+//    //    this.password=requestDto.getPassword();
+//    }
 
     public Posts(PostRequestDto requestDto,String author){//생성자 만듬
         this.title= requestDto.getTitle();
         this.content=requestDto.getContent();
         this.author=author;
-        this.password=requestDto.getPassword();
+    //    this.password=requestDto.getPassword();
     }
 
-    public void update(PostRequestDto requestDto){//업데이트기능 미리 만들어둠
+    public void update(PostRequestDto requestDto,String author){//업데이트기능 미리 만들어둠
         this.title= requestDto.getTitle();
         this.content=requestDto.getContent();
-        this.author=requestDto.getAuthor();
-        this.password=requestDto.getPassword();
+        this.author=author;
+    //    this.password=requestDto.getPassword();
     }
 }
