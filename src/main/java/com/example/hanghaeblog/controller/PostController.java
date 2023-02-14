@@ -39,13 +39,10 @@ public class PostController {
     }
 
     @PutMapping("/post/{id}")
-    public ResponseDto updatepost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto){
+    public ResponseDto updatepost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto,HttpServletRequest request){
         ResponseDto<String> post = new ResponseDto<>();
-        post.setData(postService.update(id,postRequestDto));
-        if(post.getData()==null){
-            post.setSucess("id가 잘못되었습니다");
-        }else{
-        post.setSucess(post.getData().equals("실패")?"실패":"성공");}
+        post.setData(postService.update(id,postRequestDto,request));
+        post.setSucess(post.getData().equals("성공")?"성공":"실패");
         return post;
     }
 

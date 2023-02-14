@@ -35,38 +35,26 @@ public class PostService {
 
     @Transactional
     public String createPost(PostRequestDto requestDto, HttpServletRequest request){
-        String token = jwtUtil.resolveToken(request);
-        Claims claims;
-        if(token==null)//노 토큰 노 권한!
-            return "권한이 업내오!";
-        if (jwtUtil.validateToken(token)) {
-            // 토큰에서 사용자 정보 가져오기
-            claims = jwtUtil.getUserInfoFromToken(token);
-        } else {
-            return "토큰이 고장낫서오!";
-        }
-        try{
-        userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-        );}catch (IllegalArgumentException e){return "사용자가 존재하지 않대오?";}
-
-
-        Posts post = new Posts(requestDto,claims.getSubject());
+        String username = checkTokenGetName(request);
+        if(username.equals("권한이 업내오!")||username.equals("토큰이 고장낫서오!")||username.equals("회원가입 하고 오새오!"))
+            return username;
+        Posts post = new Posts(requestDto,username);
         postRepository.save(post);
         return "성공";
     }
 
     @Transactional
-    public String update(Long id, PostRequestDto postRequestDto){
+    public String update(Long id, PostRequestDto postRequestDto,HttpServletRequest request){
+        String username = checkTokenGetName(request);
+        if(username.equals("권한이 업내오!")||username.equals("토큰이 고장낫서오!")||username.equals("회원가입 하고 오새오!"))
+            return username;
         try{
-        Posts post = postRepository.findById(id).orElseThrow(
-                ()->new IllegalArgumentException()
-        );
-        if(!postRequestDto.getPassword().equals(post.getPassword())){
-            return "실패";//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
-        }//포스트리퀘스트 dto로 받은 비밀번호가 다를경우 업데이트 전에 메소드가 종료되도록함
+        Posts post = postRepository.findById(id).orElseThrow(()->new IllegalArgumentException());
+        if(!(post.getAuthor().equals(username)))
+            return "남에 글은 수정할 수 업서오";
         post.update(postRequestDto);
-        return "성공";}catch (IllegalArgumentException E) {return null;}
+        return "성공";//아래는 글번호 오류
+        } catch (IllegalArgumentException E) {return "글이 존재하지 않아오!";}
     }
 
     @Transactional
@@ -102,6 +90,23 @@ public class PostService {
        }
     }
 
+    private String checkTokenGetName(HttpServletRequest request){
+        String token = jwtUtil.resolveToken(request);
+        Claims claims;
+        if(token==null)//노 토큰 노 권한!
+            return "권한이 업내오!";
+        if (jwtUtil.validateToken(token)) {
+            // 토큰에서 사용자 정보 가져오기
+            claims = jwtUtil.getUserInfoFromToken(token);
+        } else {
+            return "토큰이 고장낫서오!";
+        }
+        try{
+            userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+            );}catch (IllegalArgumentException e){return "회원가입 하고 오새오!";}
+        return claims.getSubject();
+    }
 
 //    @Transactional(readOnly = true)
 //    public Optional<Posts> getidone(Long id){
