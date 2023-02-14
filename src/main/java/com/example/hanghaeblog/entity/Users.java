@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "UserId")
     private Long id;
 
     //@Size(min = 4, max = 10,message = "id길이를 확인해주세요")

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Posts extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "PostId")
     private Long id;
 
     @Column(nullable = false)
