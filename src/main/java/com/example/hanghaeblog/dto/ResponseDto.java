@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PostResponseDto<T> {
+public class ResponseDto<T> {
     private String sucess;
     private T data;
 }
