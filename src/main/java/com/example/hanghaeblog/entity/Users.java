@@ -14,11 +14,12 @@ import javax.validation.constraints.Size;
 @Entity
 @NoArgsConstructor
 public class Users {
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "UserId")
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.TABLE,generator = "UserId")
+//    private Long id;
 
     //@Size(min = 4, max = 10,message = "id길이를 확인해주세요")
+    @Id
     @Pattern(regexp = "[a-z0-9]{4,10}",message = "소문자와 숫자만 가능합니다")
     @Column(nullable = false)
     private String username;
