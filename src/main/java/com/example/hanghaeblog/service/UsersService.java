@@ -2,6 +2,7 @@ package com.example.hanghaeblog.service;
 
 import com.example.hanghaeblog.dto.UsersRequestDto;
 import com.example.hanghaeblog.entity.Users;
+import com.example.hanghaeblog.entity.UsersEnum;
 import com.example.hanghaeblog.jwt.JwtUtil;
 import com.example.hanghaeblog.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class UsersService {
             if(!user.getPassword().equals(password)){
                 throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
             }
-            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
+            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getRole()));
             return "성공";
         }catch (IllegalArgumentException e){
             return "비밀번호를 확인해 주세요";

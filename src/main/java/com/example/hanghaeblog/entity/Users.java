@@ -25,11 +25,22 @@ public class Users {
     private String username;
 
     @Column(nullable = false)
-    @Pattern(regexp = "[A-Za-z0-9]{8,15}",message = "대소문자와 숫자만 가능합니다")
+    @Pattern(regexp = "[\\{\\}\\[\\]\\/?.,;:|\\)*~`!^\\-_+<>@\\#$%&\\\\\\=\\(\\'\\\"A-Za-z0-9]{8,15}",message = "대소문자와 숫자만 가능합니다")
     private String password;
+
+    @Column
+    private UsersEnum role;
 
     public Users(UsersRequestDto usersRequestDto) {
         this.username = usersRequestDto.getUsername();
         this.password = usersRequestDto.getPassword();
+        if(usersRequestDto.getRole()==null){
+            this.role = UsersEnum.USER;
+        }
+        else if(!usersRequestDto.getRole().toUpperCase().equals("ADMIN"))
+            this.role = UsersEnum.USER;
+        else{
+            this.role = UsersEnum.ADMIN;
+        }
     }
 }
