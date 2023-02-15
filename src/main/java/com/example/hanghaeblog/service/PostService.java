@@ -4,6 +4,7 @@ import com.example.hanghaeblog.dto.PostDto;
 import com.example.hanghaeblog.dto.PostRequestDto;
 import com.example.hanghaeblog.entity.Posts;
 import com.example.hanghaeblog.entity.Users;
+import com.example.hanghaeblog.entity.UsersEnum;
 import com.example.hanghaeblog.jwt.JwtUtil;
 import com.example.hanghaeblog.repository.PostRepository;
 import com.example.hanghaeblog.repository.UsersRepository;
@@ -121,7 +122,12 @@ public class PostService {
         } catch (IllegalArgumentException e) {
             return "회원가입 하고 오새오!";
         }
+        //claims.get("role", UsersEnum.class);
         return claims.getSubject();
+    }
+    private UsersEnum getEnum(HttpServletRequest request){
+        Claims claims = jwtUtil.getUserInfoFromToken(jwtUtil.resolveToken(request));
+        return claims.get("role",UsersEnum.class);
     }
 
 //    @Transactional(readOnly = true)
