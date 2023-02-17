@@ -51,8 +51,10 @@ public class PostService {
             return username;
         try {
             Posts post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+            Users user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
+            if(user.getRole()!=UsersEnum.ADMIN){
             if (!(post.getAuthor().equals(username)))
-                return "남에 글은 수정할 수 업서오";
+                return "남에 글은 수정할 수 업서오";}
             post.update(postRequestDto, username);
             return "성공";
         } catch (IllegalArgumentException E) {
@@ -127,7 +129,7 @@ public class PostService {
     }
     private UsersEnum getEnum(HttpServletRequest request){
         Claims claims = jwtUtil.getUserInfoFromToken(jwtUtil.resolveToken(request));
-        return claims.get("role",UsersEnum.class);
+        return (UsersEnum) claims.get("role");
     }
 
 //    @Transactional(readOnly = true)

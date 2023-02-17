@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
-    private final CommentsService commentsService;
+
 
     @GetMapping("/posts")
     public ResponseDto getAll() {
@@ -71,15 +71,6 @@ public class PostController {
         post.setData(postService.getidone(id));
         post.setSucess(post.getData() == null ? "글이 업서오!" : "성공");
         return post;
-    }
-
-
-    @PostMapping("/posts/{id}/")
-    public ResponseDto createComments(@PathVariable Long id, @RequestBody CommentsRequestDto commentsRequestDto, HttpServletRequest request) {
-        ResponseDto<String> comment = new ResponseDto<>();
-        comment.setData(commentsService.createComments(id, commentsRequestDto, request));
-        comment.setSucess(comment.getData().equals("성공") ? "성공" : "실패");
-        return comment;
     }
 
 

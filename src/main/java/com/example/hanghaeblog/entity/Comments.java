@@ -25,6 +25,7 @@ public class Comments extends Timestamped {
     @JoinColumn(name="PostId")
     private Posts post;
 
+
     public Comments(CommentsRequestDto commentsDto,Posts post,String author) {
         Comments = commentsDto.getComments();
         this.author=author;
