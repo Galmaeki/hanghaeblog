@@ -54,7 +54,8 @@ public class PostService {
             Users user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
             if(user.getRole()!=UsersEnum.ADMIN){
             if (!(post.getAuthor().equals(username)))
-                return "남에 글은 수정할 수 업서오";}
+                return "남에 글은 수정할 수 업서오";
+            }
             post.update(postRequestDto, username);
             return "성공";
         } catch (IllegalArgumentException E) {
@@ -68,14 +69,12 @@ public class PostService {
         if (username.equals("권한이 업내오!") || username.equals("토큰이 고장낫서오!") || username.equals("회원가입 하고 오새오!"))
             return username;
         try {
-            Posts post = postRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException("해당 글이 없음")
-            );
-//        if(!postRequestDto.getPassword().equals(post.getPassword())){
-//            return "실패";//포스트.겟패스워드를 통해 db에서 조회한 비밀번호와
-//        }
-            if(!post.getAuthor().equals(username))
+            Posts post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없음"));
+            Users user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
+            if(user.getRole()!=UsersEnum.ADMIN){
+                if(!post.getAuthor().equals(username))
                 return "남의 글은 지울수 업서오!";
+            }
             postRepository.deleteById(id);
             return "성공";
         } catch (IllegalArgumentException E) {
@@ -127,10 +126,10 @@ public class PostService {
         //claims.get("role", UsersEnum.class);
         return claims.getSubject();
     }
-    private UsersEnum getEnum(HttpServletRequest request){
-        Claims claims = jwtUtil.getUserInfoFromToken(jwtUtil.resolveToken(request));
-        return (UsersEnum) claims.get("role");
-    }
+//    private UsersEnum getEnum(HttpServletRequest request){
+//        Claims claims = jwtUtil.getUserInfoFromToken(jwtUtil.resolveToken(request));
+//        return (UsersEnum) claims.get("role");
+//    }
 
 //    @Transactional(readOnly = true)
 //    public Optional<Posts> getidone(Long id){
