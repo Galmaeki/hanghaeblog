@@ -92,6 +92,7 @@ public class PostService {
                 if(!post.getAuthor().equals(username))
                 return "남의 글은 지울수 업서오!";
             }
+            commentsRepository.deleteByPosts(post);
             postRepository.deleteById(id);
             return "성공";
         } catch (IllegalArgumentException E) {

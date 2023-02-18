@@ -12,4 +12,6 @@ public interface CommentsRepository extends JpaRepository<Comments,Long> {
     //List<Comments> findByPostOrderByCreatedAt(Posts posts);
     List<Comments> findByPostsOrderByCreatedAt(Posts posts);
 
+    void deleteByPosts(Posts post);
+
 }
