@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Getter
 @Entity
@@ -22,15 +23,16 @@ public class Comments extends Timestamped {
     private String author;
 
     @ManyToOne
-    @JoinColumn(name="PostId")
-    private Posts post;
+    @JoinColumn(name="Posts")
+    private Posts posts;
 
 
     public Comments(CommentsRequestDto commentsDto,Posts post,String author) {
         comments = commentsDto.getComments();
         this.author=author;
-        this.post = post;
+        this.posts = post;
     }
+
 
     public void update(CommentsRequestDto commentsRequestDto) {
         comments = commentsRequestDto.getComments();

@@ -1,11 +1,12 @@
 package com.example.hanghaeblog.service;
 
-import com.example.hanghaeblog.dto.PostDto;
-import com.example.hanghaeblog.dto.PostRequestDto;
+import com.example.hanghaeblog.dto.*;
+import com.example.hanghaeblog.entity.Comments;
 import com.example.hanghaeblog.entity.Posts;
 import com.example.hanghaeblog.entity.Users;
 import com.example.hanghaeblog.entity.UsersEnum;
 import com.example.hanghaeblog.jwt.JwtUtil;
+import com.example.hanghaeblog.repository.CommentsRepository;
 import com.example.hanghaeblog.repository.PostRepository;
 import com.example.hanghaeblog.repository.UsersRepository;
 import io.jsonwebtoken.Claims;
@@ -22,14 +23,30 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final UsersRepository userRepository;
+    private final CommentsRepository commentsRepository;
     private final JwtUtil jwtUtil;
+
+
+
 
     @Transactional(readOnly = true)//수정이 들어가지 않음
     public List getPosts() {
         List<Posts> lists = postRepository.findAllByOrderByModifiedAtDesc();
         List<PostDto> listdto = new ArrayList<>();
+        List<String> empt = new ArrayList<>();
+        empt.add("댓글이 업서오");
         for (Posts post : lists) {
-            listdto.add(new PostDto(post));
+            List<Comments> comments = commentsRepository.findByPostsOrderByCreatedAt(post);
+            List<CommentsDto> dto = new ArrayList<>();
+            for(Comments comm:comments){
+                CommentsDto comdto = new CommentsDto(comm);
+                dto.add(comdto);
+            }
+            PostDto<List> posts = new PostDto(post,dto);
+            listdto.add(posts);
+            if(posts.getComments().isEmpty()){
+                posts.setComments(empt);
+            }
         }
         return listdto;
     }
@@ -95,10 +112,19 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostDto getidone(Long id) {
         try {
-            Posts post = postRepository.findById(id).orElseThrow(
-                    () -> new IllegalArgumentException()
-            );
-            PostDto postDto = new PostDto(post);
+            Posts post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+            List<Comments> comments = commentsRepository.findByPostsOrderByCreatedAt(post);
+            List<String> empt = new ArrayList<>();
+            List<CommentsDto> dto = new ArrayList<>();
+            empt.add("댓글이 업서오");
+            for(Comments comm:comments){
+                CommentsDto comdto = new CommentsDto(comm);
+                dto.add(comdto);
+            }
+            PostDto postDto = new PostDto(post,dto);
+            if(postDto.getComments()==null){
+                postDto.setComments(empt);
+            }
             return postDto;
         } catch (IllegalArgumentException EE) {
             return null;
