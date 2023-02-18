@@ -56,7 +56,7 @@ public class PostService {
             if (!(post.getAuthor().equals(username)))
                 return "남에 글은 수정할 수 업서오";
             }
-            post.update(postRequestDto, username);
+            post.update(postRequestDto);
             return "성공";
         } catch (IllegalArgumentException E) {
             return "글이 존재하지 않아오!";

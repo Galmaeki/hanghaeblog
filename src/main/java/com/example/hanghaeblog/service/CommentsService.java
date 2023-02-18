@@ -3,6 +3,8 @@ package com.example.hanghaeblog.service;
 import com.example.hanghaeblog.dto.CommentsRequestDto;
 import com.example.hanghaeblog.entity.Comments;
 import com.example.hanghaeblog.entity.Posts;
+import com.example.hanghaeblog.entity.Users;
+import com.example.hanghaeblog.entity.UsersEnum;
 import com.example.hanghaeblog.jwt.JwtUtil;
 import com.example.hanghaeblog.repository.CommentsRepository;
 import com.example.hanghaeblog.repository.PostRepository;
@@ -22,17 +24,6 @@ public class CommentsService {
     private final PostRepository postRepository;
     private final UsersRepository userRepository;
     private final JwtUtil jwtUtil;
-
-    @Transactional
-    public String createComments(Long id, CommentsRequestDto commentsRequestDto, HttpServletRequest request) {
-        String username = checkTokenGetName(request);
-        if (username.equals("권한이 업내오!") || username.equals("토큰이 고장낫서오!") || username.equals("회원가입 하고 오새오!"))
-            return username;
-        Posts post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
-        Comments comments = new Comments(commentsRequestDto,post,username);
-        commentsRepository.save(comments);
-        return "성공";
-    }
 
     private String checkTokenGetName(HttpServletRequest request) {
         String token = jwtUtil.resolveToken(request);
@@ -54,5 +45,55 @@ public class CommentsService {
         }
         //claims.get("role", UsersEnum.class);
         return claims.getSubject();
+    }
+
+    @Transactional
+    public String createComments(Long id, CommentsRequestDto commentsRequestDto, HttpServletRequest request) {
+        String username = checkTokenGetName(request);
+        if (username.equals("권한이 업내오!") || username.equals("토큰이 고장낫서오!") || username.equals("회원가입 하고 오새오!"))
+            return username;
+        Posts post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+        Comments comments = new Comments(commentsRequestDto,post,username);
+        commentsRepository.save(comments);
+        return "성공";
+    }
+
+
+
+    public String update(Long id, CommentsRequestDto commentsRequestDto, HttpServletRequest request) {
+        String username = checkTokenGetName(request);
+        if (username.equals("권한이 업내오!") || username.equals("토큰이 고장낫서오!") || username.equals("회원가입 하고 오새오!"))
+            return username;
+        try {
+//            Posts post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+            Users user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());//위에서 검증해서 안터짐
+            Comments comments = commentsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+            if(user.getRole()!= UsersEnum.ADMIN){
+                if (!(comments.getAuthor().equals(username)))
+                    return "남에 글은 수정할 수 업서오";
+            }
+            comments.update(commentsRequestDto);
+            return "성공";
+        } catch (IllegalArgumentException E) {
+            return "원 댓글이 존재하지 않아오!";
+        }
+    }
+
+    public String delete(Long id, HttpServletRequest request) {
+        String username = checkTokenGetName(request);
+        if (username.equals("권한이 업내오!") || username.equals("토큰이 고장낫서오!") || username.equals("회원가입 하고 오새오!"))
+            return username;
+        try {
+            Comments comments = commentsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글이 없음"));
+            Users user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());
+            if(user.getRole()!=UsersEnum.ADMIN){
+                if(!comments.getAuthor().equals(username))
+                    return "남의 댓글은 지울수 업서오!";
+            }
+            commentsRepository.deleteById(id);
+            return "성공";
+        } catch (IllegalArgumentException E) {
+            return "댓글이 존재하지 않아오!";
+        }
     }
 }

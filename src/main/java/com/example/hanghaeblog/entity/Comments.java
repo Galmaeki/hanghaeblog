@@ -16,7 +16,7 @@ public class Comments extends Timestamped {
     private Long Commentsid;
 
     @Column(nullable = false)
-    private String Comments;
+    private String comments;
     //글 1개가 여러개의 댓글을 달 수 있으니 댓글은 매니투 원이 되어야함
     @Column(nullable = false)
     private String author;
@@ -27,8 +27,12 @@ public class Comments extends Timestamped {
 
 
     public Comments(CommentsRequestDto commentsDto,Posts post,String author) {
-        Comments = commentsDto.getComments();
+        comments = commentsDto.getComments();
         this.author=author;
         this.post = post;
+    }
+
+    public void update(CommentsRequestDto commentsRequestDto) {
+        comments = commentsRequestDto.getComments();
     }
 }
