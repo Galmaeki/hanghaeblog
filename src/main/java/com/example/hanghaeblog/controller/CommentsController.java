@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CommentsController {
 
     private final CommentsService commentsService;
-    @PostMapping("/comments/{id}")
+    @PostMapping("/comments/{id}")//포스트아이디
     public ResponseDto createComments(@PathVariable Long id, @RequestBody CommentsRequestDto commentsRequestDto, HttpServletRequest request) {
         ResponseDto<String> comment = new ResponseDto<>();
         comment.setData(commentsService.createComments(id, commentsRequestDto, request));
@@ -22,7 +22,7 @@ public class CommentsController {
         return comment;
     }
 
-    @PutMapping("/comments/update/{id}")
+    @PutMapping("/comments/{id}")//댓글아이디
     public ResponseDto updatepost(@PathVariable Long id, @RequestBody CommentsRequestDto commentsRequestDto, HttpServletRequest request) {
         ResponseDto<String> comments = new ResponseDto<>();
         comments.setData(commentsService.update(id, commentsRequestDto, request));
@@ -30,7 +30,7 @@ public class CommentsController {
         return comments;
     }
 
-    @DeleteMapping("/comments/delete/{id}")
+    @DeleteMapping("/comments/{id}")
     public ResponseDto deletepost(@PathVariable Long id, HttpServletRequest request) {
         ResponseDto<String> comments = new ResponseDto<>();
         comments.setData(commentsService.delete(id, request));

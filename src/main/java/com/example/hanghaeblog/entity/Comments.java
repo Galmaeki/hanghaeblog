@@ -34,7 +34,7 @@ public class Comments extends Timestamped {
     }
 
 
-    public void update(CommentsRequestDto commentsRequestDto) {
-        comments = commentsRequestDto.getComments();
+    public void update(CommentsRequestDto commentsDto) {
+        this.comments = commentsDto.getComments();
     }
 }

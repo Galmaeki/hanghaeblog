@@ -60,12 +60,12 @@ public class CommentsService {
 
 
 
+    @Transactional
     public String update(Long id, CommentsRequestDto commentsRequestDto, HttpServletRequest request) {
         String username = checkTokenGetName(request);
         if (username.equals("권한이 업내오!") || username.equals("토큰이 고장낫서오!") || username.equals("회원가입 하고 오새오!"))
             return username;
         try {
-//            Posts post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
             Users user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException());//위에서 검증해서 안터짐
             Comments comments = commentsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
             if(user.getRole()!= UsersEnum.ADMIN){
@@ -79,6 +79,7 @@ public class CommentsService {
         }
     }
 
+    @Transactional
     public String delete(Long id, HttpServletRequest request) {
         String username = checkTokenGetName(request);
         if (username.equals("권한이 업내오!") || username.equals("토큰이 고장낫서오!") || username.equals("회원가입 하고 오새오!"))
